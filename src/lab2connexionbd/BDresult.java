@@ -6,6 +6,10 @@
 package lab2connexionbd;
 
 import java.sql.*;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Locale;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
@@ -21,12 +25,15 @@ public class BDresult extends javax.swing.JFrame {
      */
     Connection _connection;
     Integer _index;
-    
+    PreparedStatement _pst;
+    ResultSet _rs;
     public BDresult() {
         initComponents(); 
         
         _connection = null;
         _index = 0;
+       
+                
     }
 
     
@@ -196,23 +203,31 @@ public class BDresult extends javax.swing.JFrame {
 
     // Database structure: 
     // idPourse (pk) number(5)
-    // nomPourse varchar2(60)
+    // nomPourse varchar2(30)
     // dateNaissancePourse date
     // agePourse number(5)
     // prixPourse number(5,2)
     
     // <editor-fold defaultstate="collapsed" desc="Events">
     private void btnAjouterActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAjouterActionPerformed
-        // TODO add your handling code here:
-        // what the method to have inpput 
-       
-       InsertUpdateQuery("INSERT INTO Pourse VALUES(?, ?, ?, ?, ?)"); 
+        try {
+            // TODO add your handling code here:
+            // what the method to have inpput
+ 
+            InsertUpdateQuery("INSERT INTO Pourse VALUES(?, ?, ?, ?, ?)");
+        } catch (ParseException ex) {
+            Logger.getLogger(BDresult.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }//GEN-LAST:event_btnAjouterActionPerformed
 
     private void btnModifierActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnModifierActionPerformed
-        // TODO add your handling code here:
-        
-        InsertUpdateQuery("UPDATE Pourse SET nomPourse = ?, dateNaissancePourse = ?, agePourse = ?, prixPourse = ? where idPourse = ?"); //user need to enter the current row displayed
+        try {
+            // TODO add your handling code here:
+            
+            InsertUpdateQuery("UPDATE Pourse SET nomPourse = ?, agePourse = ?, dateNaissancePourse = ? , prixPourse = ? where idPourse = ?"); //user need to enter the current row displayed
+        } catch (ParseException ex) {
+            Logger.getLogger(BDresult.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }//GEN-LAST:event_btnModifierActionPerformed
 
     private void btnDetruireActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDetruireActionPerformed
@@ -249,7 +264,9 @@ public class BDresult extends javax.swing.JFrame {
             String url = "jdbc:mysql://" + serverName + "/" + mydatabase; // a JDBC url      
             String username = "root";      
             String password = "";     
-            _connection = DriverManager.getConnection(url, username, password);      
+            _connection = DriverManager.getConnection(url, username, password); 
+            
+             getList(); 
         } catch (ClassNotFoundException e) {  
             // Could not find the database driver      
         } 
@@ -273,45 +290,69 @@ public class BDresult extends javax.swing.JFrame {
 
     private void lbFirstMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lbFirstMouseClicked
         // TODO add your handling code here:
-        // How the fuck optional parameters work in java?
-        _index = 0;
-        
-        String[] params = {"nothing"};
-        selectQuery("Select * FROM Pourse LIMIT 1", params);
+     
+        getList();       
+         try {
+            boolean first = _rs.first();
+            String row = String.format("%s %s %s %s %s", _rs.getString(1), _rs.getString(2), _rs.getString(3), _rs.getString(4), _rs.getString(5));
+            lbCurrentRow.setText(row);
+        } catch (SQLException ex) {
+            Logger.getLogger(BDresult.class.getName()).log(Level.SEVERE, null, ex);
+        } 
     }//GEN-LAST:event_lbFirstMouseClicked
 
     private void lbPreviousMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lbPreviousMouseClicked
         // TODO add your handling code here:
-        _index -= 1;
-     
-        // maybe index needs to be an int
-        String[] params = {_index.toString()};
-        selectQuery("Select * FROM Pourse ORDER BY idPourse LIMIT 1 OFFSET ?", params);
+        
+              
+         try {  
+             
+            int indexRow = _rs.getRow() - 1;      
+            getList(); 
+            _rs.first();   
+           
+            while(indexRow != _rs.getRow() && _rs.next()) {
+                
+            }
+            String row = String.format("%s %s %s %s %s", _rs.getString(1), _rs.getString(2), _rs.getString(3), _rs.getString(4), _rs.getString(5));
+            lbCurrentRow.setText(row);
+        } catch (SQLException ex) {
+            Logger.getLogger(BDresult.class.getName()).log(Level.SEVERE, null, ex);
+        } 
     }//GEN-LAST:event_lbPreviousMouseClicked
 
     private void lbNextMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lbNextMouseClicked
-        // TODO add your handling code here:
-        _index += 1;
-        
-        // maybe index needs to be an int
-        String[] params = {_index.toString()};
-        selectQuery("Select * FROM Pourse ORDER BY idPourse LIMIT 1 OFFSET ?", params);
+        // TODO add your handling code here:        
+         try {
+             
+            int indexRow = _rs.getRow() + 1;
+             getList(); 
+           _rs.first();
+                     
+            while(indexRow != _rs.getRow() && _rs.next()) {
+                
+            }
+            
+            boolean first = _rs.next();
+            String row = String.format("%s %s %s %s %s", _rs.getString(1), _rs.getString(2), _rs.getString(3), _rs.getString(4), _rs.getString(5));
+            lbCurrentRow.setText(row);
+        } catch (SQLException ex) {
+            Logger.getLogger(BDresult.class.getName()).log(Level.SEVERE, null, ex);
+        } 
     }//GEN-LAST:event_lbNextMouseClicked
 
     private void lbLastMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lbLastMouseClicked
-        // TODO add your handling code here:
-        PreparedStatement pst;
-        ResultSet rs;
-        try {
-            pst = _connection.prepareCall("SELECT count(*) FROM Pourse");
-            rs = pst.executeQuery();
-            _index = rs.getInt(1);
+        // TODO add your handling code here:      
+        
+       getList();       
+         try {
+             
+            boolean first = _rs.last();
+            String row = String.format("%s %s %s %s %s", _rs.getString(1), _rs.getString(2), _rs.getString(3), _rs.getString(4), _rs.getString(5));
+            lbCurrentRow.setText(row);
         } catch (SQLException ex) {
             Logger.getLogger(BDresult.class.getName()).log(Level.SEVERE, null, ex);
-        }          
-          
-        String[] params = {"nothing"};
-        selectQuery("Select * FROM Pourse ORDER BY idPourse DESC LIMIT 1", params);
+        } 
     }//GEN-LAST:event_lbLastMouseClicked
     // </editor-fold>
     
@@ -334,27 +375,40 @@ public class BDresult extends javax.swing.JFrame {
         
     }
     
-    private void InsertUpdateQuery(String pQuery) {
+    private void InsertUpdateQuery(String pQuery) throws ParseException {
           PreparedStatement pst = null;
        
         String[] params = new String[5];
         params[0] = JOptionPane.showInputDialog("idPourse: "); //should be automatic
         params[1] = JOptionPane.showInputDialog("nomPourse: ");
-        params[2] = JOptionPane.showInputDialog("dateNaissancePourse: ");
-        params[3] = JOptionPane.showInputDialog("agePourse: ");
+        params[2] = JOptionPane.showInputDialog("agePourse: ");
+        params[3] = JOptionPane.showInputDialog("dateNaissancePourse (\"yyyy-MM-dd\"): ");      
         params[4] = JOptionPane.showInputDialog("prixPourse: ");
         
         try {
             pst = _connection.prepareStatement(pQuery, 1005, 1008);
             pst.clearParameters();
-            for(int i = 0; i < params.length; i++) {
-                pst.setString(i + 1, params[i]);
-            }
-                
+            
+            pst.setInt(5, Integer.parseInt(params[0]));
+            pst.setString(1, params[1]);           
+            pst.setInt(2, Integer.parseInt(params[2]));
+            pst.setDate(3, java.sql.Date.valueOf(params[3]));
+            pst.setDouble(4, Double.parseDouble(params[4]));
+            
             pst.executeUpdate();          
         } catch (SQLException ex) {
             Logger.getLogger(BDresult.class.getName()).log(Level.SEVERE, null, ex);
         }
+    }
+    
+    private void getList() {
+         try {
+            _pst = _connection.prepareCall("SELECT * FROM Pourse");
+            _rs = _pst.executeQuery();
+           // _index = _rs.getInt(1);
+        } catch (SQLException ex) {
+            Logger.getLogger(BDresult.class.getName()).log(Level.SEVERE, null, ex);
+        }  
     }
     // </editor-fold>
     
