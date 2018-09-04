@@ -19,11 +19,13 @@ public class BDresult extends javax.swing.JFrame {
      * Creates new form BDresult
      */
     Connection _connection;
-     
+    Integer _index;
+    
     public BDresult() {
         initComponents(); 
         
         _connection = null;
+        _index = 0;
     }
 
     
@@ -251,19 +253,64 @@ public class BDresult extends javax.swing.JFrame {
 
     private void lbFirstMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lbFirstMouseClicked
         // TODO add your handling code here:
+        // How the fuck optional parameters work in java?
+        _index = 0;
+        
+        String[] params = {"nothing"};
+        selectQuery("Select * FROM Pourse LIMIT 1", params);
     }//GEN-LAST:event_lbFirstMouseClicked
 
     private void lbPreviousMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lbPreviousMouseClicked
         // TODO add your handling code here:
+        _index -= 1;
+        
+        String[] params = {"nothing"};
+        selectQuery("Select * FROM Pourse LIMIT 1", params);
     }//GEN-LAST:event_lbPreviousMouseClicked
 
     private void lbNextMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lbNextMouseClicked
         // TODO add your handling code here:
+        _index += 1;
+        
+        String[] params = {"nothing"};
+        selectQuery("Select * FROM Pourse LIMIT 1", params);
     }//GEN-LAST:event_lbNextMouseClicked
 
     private void lbLastMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lbLastMouseClicked
         // TODO add your handling code here:
+        PreparedStatement pst;
+        ResultSet rs;
+        try {
+            pst = _connection.prepareCall("SELECT count(*) FROM Pourse");
+            rs = pst.executeQuery();
+            _index = rs.getInt(1);
+        } catch (SQLException ex) {
+            Logger.getLogger(BDresult.class.getName()).log(Level.SEVERE, null, ex);
+        }          
+          
+        String[] params = {"nothing"};
+        selectQuery("Select * FROM Pourse ORDER BY idPourse DESC LIMIT 1", params);
     }//GEN-LAST:event_lbLastMouseClicked
+    // </editor-fold>
+    
+    // <editor-fold defaultstate="collapsed" desc="Methods">
+    private void selectQuery(String pQuery, String[] params) {
+        PreparedStatement pst = null;
+        ResultSet rs = null;
+        
+        try {
+            pst = _connection.prepareStatement(pQuery, 1005, 1008);
+            pst.clearParameters();
+            for(int i = 0; i < params.length; i++)
+                pst.setString(i + 1, params[i]);
+            rs = pst.executeQuery();
+            
+            lbCurrentRow.setText(rs.toString());           
+        } catch (SQLException ex) {
+            Logger.getLogger(BDresult.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+    }
     // </editor-fold>
     
     /**
