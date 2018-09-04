@@ -49,7 +49,6 @@ public class BDresult extends javax.swing.JFrame {
         btnAjouter = new javax.swing.JButton();
         btnModifier = new javax.swing.JButton();
         btnDetruire = new javax.swing.JButton();
-        cbPrepare = new javax.swing.JCheckBox();
         btnConnexion = new javax.swing.JButton();
         btnDeconnexion = new javax.swing.JButton();
         lbInfoRow = new javax.swing.JLabel();
@@ -79,13 +78,6 @@ public class BDresult extends javax.swing.JFrame {
         btnDetruire.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnDetruireActionPerformed(evt);
-            }
-        });
-
-        cbPrepare.setText("Prepare Statement");
-        cbPrepare.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                cbPrepareActionPerformed(evt);
             }
         });
 
@@ -145,7 +137,6 @@ public class BDresult extends javax.swing.JFrame {
                         .addContainerGap()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(btnDetruire)
-                            .addComponent(cbPrepare)
                             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                                 .addComponent(btnAjouter, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                 .addComponent(btnModifier, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
@@ -193,9 +184,7 @@ public class BDresult extends javax.swing.JFrame {
                 .addComponent(btnModifier)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(btnDetruire)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(cbPrepare)
-                .addContainerGap())
+                .addContainerGap(36, Short.MAX_VALUE))
         );
 
         pack();
@@ -214,7 +203,7 @@ public class BDresult extends javax.swing.JFrame {
             // TODO add your handling code here:
             // what the method to have inpput
  
-            InsertUpdateQuery("INSERT INTO Pourse VALUES(?, ?, ?, ?, ?)");
+            Insert("INSERT INTO Pourse VALUES(?, ?, ?, ?, ?)");
         } catch (ParseException ex) {
             Logger.getLogger(BDresult.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -224,7 +213,7 @@ public class BDresult extends javax.swing.JFrame {
         try {
             // TODO add your handling code here:
             
-            InsertUpdateQuery("UPDATE Pourse SET nomPourse = ?, agePourse = ?, dateNaissancePourse = ? , prixPourse = ? where idPourse = ?"); //user need to enter the current row displayed
+            UpdateQuery("UPDATE Pourse SET nomPourse = ?, agePourse = ?, dateNaissancePourse = ? , prixPourse = ? where idPourse = ?"); //user need to enter the current row displayed
         } catch (ParseException ex) {
             Logger.getLogger(BDresult.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -246,11 +235,6 @@ public class BDresult extends javax.swing.JFrame {
             Logger.getLogger(BDresult.class.getName()).log(Level.SEVERE, null, ex);
         }
     }//GEN-LAST:event_btnDetruireActionPerformed
-
-    private void cbPrepareActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbPrepareActionPerformed
-        // TODO add your handling code here:
-        // for the moment we assume its always checked
-    }//GEN-LAST:event_cbPrepareActionPerformed
 
     private void btnConnexionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnConnexionActionPerformed
         // TODO add your handling code here:
@@ -309,11 +293,8 @@ public class BDresult extends javax.swing.JFrame {
              
             int indexRow = _rs.getRow() - 1;      
             getList(); 
-            _rs.first();   
-           
-            while(indexRow != _rs.getRow() && _rs.next()) {
-                
-            }
+            _rs.absolute(indexRow);               
+       
             String row = String.format("%s %s %s %s %s", _rs.getString(1), _rs.getString(2), _rs.getString(3), _rs.getString(4), _rs.getString(5));
             lbCurrentRow.setText(row);
         } catch (SQLException ex) {
@@ -326,14 +307,9 @@ public class BDresult extends javax.swing.JFrame {
          try {
              
             int indexRow = _rs.getRow() + 1;
-             getList(); 
-           _rs.first();
-                     
-            while(indexRow != _rs.getRow() && _rs.next()) {
-                
-            }
-            
-            boolean first = _rs.next();
+             getList();        
+            _rs.absolute(indexRow);     
+                      
             String row = String.format("%s %s %s %s %s", _rs.getString(1), _rs.getString(2), _rs.getString(3), _rs.getString(4), _rs.getString(5));
             lbCurrentRow.setText(row);
         } catch (SQLException ex) {
@@ -375,7 +351,7 @@ public class BDresult extends javax.swing.JFrame {
         
     }
     
-    private void InsertUpdateQuery(String pQuery) throws ParseException {
+    private void UpdateQuery(String pQuery) throws ParseException {
           PreparedStatement pst = null;
        
         String[] params = new String[5];
@@ -394,6 +370,31 @@ public class BDresult extends javax.swing.JFrame {
             pst.setInt(2, Integer.parseInt(params[2]));
             pst.setDate(3, java.sql.Date.valueOf(params[3]));
             pst.setDouble(4, Double.parseDouble(params[4]));
+            
+            pst.executeUpdate();          
+        } catch (SQLException ex) {
+            Logger.getLogger(BDresult.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    private void Insert(String pQuery) throws ParseException {
+          PreparedStatement pst = null;
+       
+        String[] params = new String[5];
+        params[0] = JOptionPane.showInputDialog("idPourse: "); //should be automatic
+        params[1] = JOptionPane.showInputDialog("nomPourse: ");
+        params[2] = JOptionPane.showInputDialog("agePourse: ");
+        params[3] = JOptionPane.showInputDialog("dateNaissancePourse (\"yyyy-MM-dd\"): ");      
+        params[4] = JOptionPane.showInputDialog("prixPourse: ");
+        
+        try {
+            pst = _connection.prepareStatement(pQuery, 1005, 1008);
+            pst.clearParameters();
+            
+            pst.setInt(1, Integer.parseInt(params[0]));
+            pst.setString(2, params[1]);           
+            pst.setInt(3, Integer.parseInt(params[2]));
+            pst.setDate(4, java.sql.Date.valueOf(params[3]));
+            pst.setDouble(5, Double.parseDouble(params[4]));
             
             pst.executeUpdate();          
         } catch (SQLException ex) {
@@ -453,7 +454,6 @@ public class BDresult extends javax.swing.JFrame {
     private javax.swing.JButton btnDeconnexion;
     private javax.swing.JButton btnDetruire;
     private javax.swing.JButton btnModifier;
-    private javax.swing.JCheckBox cbPrepare;
     private javax.swing.JLabel lbCurrentRow;
     private javax.swing.JLabel lbFirst;
     private javax.swing.JLabel lbInfoRow;

@@ -29,7 +29,6 @@
                       <EmptySpace max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="0" attributes="0">
                           <Component id="btnDetruire" alignment="0" min="-2" max="-2" attributes="0"/>
-                          <Component id="cbPrepare" alignment="0" min="-2" max="-2" attributes="0"/>
                           <Group type="103" alignment="0" groupAlignment="1" max="-2" attributes="0">
                               <Component id="btnAjouter" alignment="0" max="32767" attributes="0"/>
                               <Component id="btnModifier" alignment="0" max="32767" attributes="0"/>
@@ -91,9 +90,7 @@
               <Component id="btnModifier" min="-2" max="-2" attributes="0"/>
               <EmptySpace max="-2" attributes="0"/>
               <Component id="btnDetruire" min="-2" max="-2" attributes="0"/>
-              <EmptySpace max="32767" attributes="0"/>
-              <Component id="cbPrepare" min="-2" max="-2" attributes="0"/>
-              <EmptySpace max="-2" attributes="0"/>
+              <EmptySpace pref="36" max="32767" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>
@@ -121,14 +118,6 @@
       </Properties>
       <Events>
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnDetruireActionPerformed"/>
-      </Events>
-    </Component>
-    <Component class="javax.swing.JCheckBox" name="cbPrepare">
-      <Properties>
-        <Property name="text" type="java.lang.String" value="Prepare Statement"/>
-      </Properties>
-      <Events>
-        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="cbPrepareActionPerformed"/>
       </Events>
     </Component>
     <Component class="javax.swing.JButton" name="btnConnexion">
