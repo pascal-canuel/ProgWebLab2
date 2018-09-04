@@ -8,6 +8,7 @@ package lab2connexionbd;
 import java.sql.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -195,14 +196,37 @@ public class BDresult extends javax.swing.JFrame {
 
     // Database structure: 
     // idPourse (pk) number(5)
-    // idNomPourse varchar2(60)
-    // idDateNaissancePourse date
-    // idAgePourse number(5)
-    // idPrixPourse number(5,2)
+    // nomPourse varchar2(60)
+    // dateNaissancePourse date
+    // agePourse number(5)
+    // prixPourse number(5,2)
     
     // <editor-fold defaultstate="collapsed" desc="Events">
     private void btnAjouterActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAjouterActionPerformed
         // TODO add your handling code here:
+        // what the method to have inpput 
+        
+        PreparedStatement pst = null;
+       
+        String query = "INSERT INTO Pourse VALUES(?, ?, ?, ?, ?)";
+        String[] params = new String[5];
+        params[0] = JOptionPane.showInputDialog("idPourse: "); //should be automatic
+        params[1] = JOptionPane.showInputDialog("nomPourse: ");
+        params[2] = JOptionPane.showInputDialog("dateNaissancePourse: ");
+        params[3] = JOptionPane.showInputDialog("agePourse: ");
+        params[4] = JOptionPane.showInputDialog("prixPourse: ");
+        
+        try {
+            pst = _connection.prepareStatement(query, 1005, 1008);
+            pst.clearParameters();
+            for(int i = 0; i < params.length; i++) {
+                pst.setString(i + 1, params[i]);
+            }
+                
+            pst.executeUpdate();          
+        } catch (SQLException ex) {
+            Logger.getLogger(BDresult.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }//GEN-LAST:event_btnAjouterActionPerformed
 
     private void btnModifierActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnModifierActionPerformed
@@ -215,6 +239,7 @@ public class BDresult extends javax.swing.JFrame {
 
     private void cbPrepareActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbPrepareActionPerformed
         // TODO add your handling code here:
+        // for the moment we assume its always checked
     }//GEN-LAST:event_cbPrepareActionPerformed
 
     private void btnConnexionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnConnexionActionPerformed
@@ -263,17 +288,19 @@ public class BDresult extends javax.swing.JFrame {
     private void lbPreviousMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lbPreviousMouseClicked
         // TODO add your handling code here:
         _index -= 1;
-        
-        String[] params = {"nothing"};
-        selectQuery("Select * FROM Pourse LIMIT 1", params);
+     
+        // maybe index needs to be an int
+        String[] params = {_index.toString()};
+        selectQuery("Select * FROM Pourse ORDER BY idPourse LIMIT 1 OFFSET ?", params);
     }//GEN-LAST:event_lbPreviousMouseClicked
 
     private void lbNextMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lbNextMouseClicked
         // TODO add your handling code here:
         _index += 1;
         
-        String[] params = {"nothing"};
-        selectQuery("Select * FROM Pourse LIMIT 1", params);
+        // maybe index needs to be an int
+        String[] params = {_index.toString()};
+        selectQuery("Select * FROM Pourse ORDER BY idPourse LIMIT 1 OFFSET ?", params);
     }//GEN-LAST:event_lbNextMouseClicked
 
     private void lbLastMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lbLastMouseClicked
