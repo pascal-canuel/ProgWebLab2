@@ -18,33 +18,12 @@ public class BDresult extends javax.swing.JFrame {
     /**
      * Creates new form BDresult
      */
+    Connection _connection;
+     
     public BDresult() {
-        initComponents();
+        initComponents(); 
         
-        Connection connection = null;  
-        try {  
-            // Load the JDBC driver      
-            Class.forName("com.mysql.jdbc.Driver").newInstance(); 
-
-            // Create a connection to the database      
-            String serverName = "localhost";      
-            String mydatabase = "lab2";      
-            String url = "jdbc:mysql://" + serverName + "/" + mydatabase; // a JDBC url      
-            String username = "root";      
-            String password = "";     
-            connection = DriverManager.getConnection(url, username, password);      
-        } catch (ClassNotFoundException e) {  
-            // Could not find the database driver      
-        } 
-        catch (SQLException e) {  
-            // Could not connect to the database  
-        } catch (InstantiationException ex) {
-            Logger.getLogger(BDresult.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            Logger.getLogger(BDresult.class.getName()).log(Level.SEVERE, null, ex);
-        }
- 
-        
+        _connection = null;
     }
 
     
@@ -238,10 +217,36 @@ public class BDresult extends javax.swing.JFrame {
 
     private void btnConnexionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnConnexionActionPerformed
         // TODO add your handling code here:
+        try {  
+            // Load the JDBC driver      
+            Class.forName("com.mysql.jdbc.Driver").newInstance(); 
+
+            // Create a connection to the database      
+            String serverName = "localhost";      
+            String mydatabase = "lab2";      
+            String url = "jdbc:mysql://" + serverName + "/" + mydatabase; // a JDBC url      
+            String username = "root";      
+            String password = "";     
+            _connection = DriverManager.getConnection(url, username, password);      
+        } catch (ClassNotFoundException e) {  
+            // Could not find the database driver      
+        } 
+        catch (SQLException e) {  
+            // Could not connect to the database  
+        } catch (InstantiationException ex) {
+            Logger.getLogger(BDresult.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IllegalAccessException ex) {
+            Logger.getLogger(BDresult.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }//GEN-LAST:event_btnConnexionActionPerformed
 
     private void btnDeconnexionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeconnexionActionPerformed
-        // TODO add your handling code here:
+        try {
+            // TODO add your handling code here:
+            _connection.close();
+        } catch (SQLException ex) {
+            Logger.getLogger(BDresult.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }//GEN-LAST:event_btnDeconnexionActionPerformed
 
     private void lbFirstMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lbFirstMouseClicked
