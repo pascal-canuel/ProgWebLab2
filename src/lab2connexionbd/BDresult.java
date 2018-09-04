@@ -205,36 +205,31 @@ public class BDresult extends javax.swing.JFrame {
     private void btnAjouterActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAjouterActionPerformed
         // TODO add your handling code here:
         // what the method to have inpput 
+       
+       InsertUpdateQuery("INSERT INTO Pourse VALUES(?, ?, ?, ?, ?)"); 
+    }//GEN-LAST:event_btnAjouterActionPerformed
+
+    private void btnModifierActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnModifierActionPerformed
+        // TODO add your handling code here:
+        
+        InsertUpdateQuery("UPDATE Pourse SET nomPourse = ?, dateNaissancePourse = ?, agePourse = ?, prixPourse = ? where idPourse = ?"); //user need to enter the current row displayed
+    }//GEN-LAST:event_btnModifierActionPerformed
+
+    private void btnDetruireActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDetruireActionPerformed
+        // TODO add your handling code here:
         
         PreparedStatement pst = null;
-       
-        String query = "INSERT INTO Pourse VALUES(?, ?, ?, ?, ?)";
-        String[] params = new String[5];
-        params[0] = JOptionPane.showInputDialog("idPourse: "); //should be automatic
-        params[1] = JOptionPane.showInputDialog("nomPourse: ");
-        params[2] = JOptionPane.showInputDialog("dateNaissancePourse: ");
-        params[3] = JOptionPane.showInputDialog("agePourse: ");
-        params[4] = JOptionPane.showInputDialog("prixPourse: ");
-        
+        String query = "DELETE FROM Pourse where idPourse = ?";
+        String idPourse = JOptionPane.showInputDialog("idPourse: "); 
         try {
             pst = _connection.prepareStatement(query, 1005, 1008);
             pst.clearParameters();
-            for(int i = 0; i < params.length; i++) {
-                pst.setString(i + 1, params[i]);
-            }
+            pst.setString(1, idPourse);
                 
             pst.executeUpdate();          
         } catch (SQLException ex) {
             Logger.getLogger(BDresult.class.getName()).log(Level.SEVERE, null, ex);
         }
-    }//GEN-LAST:event_btnAjouterActionPerformed
-
-    private void btnModifierActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnModifierActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_btnModifierActionPerformed
-
-    private void btnDetruireActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDetruireActionPerformed
-        // TODO add your handling code here:
     }//GEN-LAST:event_btnDetruireActionPerformed
 
     private void cbPrepareActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbPrepareActionPerformed
@@ -337,6 +332,29 @@ public class BDresult extends javax.swing.JFrame {
             Logger.getLogger(BDresult.class.getName()).log(Level.SEVERE, null, ex);
         }
         
+    }
+    
+    private void InsertUpdateQuery(String pQuery) {
+          PreparedStatement pst = null;
+       
+        String[] params = new String[5];
+        params[0] = JOptionPane.showInputDialog("idPourse: "); //should be automatic
+        params[1] = JOptionPane.showInputDialog("nomPourse: ");
+        params[2] = JOptionPane.showInputDialog("dateNaissancePourse: ");
+        params[3] = JOptionPane.showInputDialog("agePourse: ");
+        params[4] = JOptionPane.showInputDialog("prixPourse: ");
+        
+        try {
+            pst = _connection.prepareStatement(pQuery, 1005, 1008);
+            pst.clearParameters();
+            for(int i = 0; i < params.length; i++) {
+                pst.setString(i + 1, params[i]);
+            }
+                
+            pst.executeUpdate();          
+        } catch (SQLException ex) {
+            Logger.getLogger(BDresult.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
     // </editor-fold>
     
