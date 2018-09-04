@@ -61,47 +61,206 @@ public class BDresult extends javax.swing.JFrame {
         btnModifier = new javax.swing.JButton();
         btnDetruire = new javax.swing.JButton();
         cbPrepare = new javax.swing.JCheckBox();
+        btnConnexion = new javax.swing.JButton();
+        btnDeconnexion = new javax.swing.JButton();
+        lbInfoRow = new javax.swing.JLabel();
+        lbCurrentRow = new javax.swing.JLabel();
+        lbFirst = new javax.swing.JLabel();
+        lbPrevious = new javax.swing.JLabel();
+        lbNext = new javax.swing.JLabel();
+        lbLast = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
         btnAjouter.setText("Ajouter");
+        btnAjouter.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnAjouterActionPerformed(evt);
+            }
+        });
 
         btnModifier.setText("Modifier");
+        btnModifier.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnModifierActionPerformed(evt);
+            }
+        });
 
         btnDetruire.setText("Détruire");
+        btnDetruire.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnDetruireActionPerformed(evt);
+            }
+        });
 
         cbPrepare.setText("Prepare Statement");
+        cbPrepare.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cbPrepareActionPerformed(evt);
+            }
+        });
+
+        btnConnexion.setText("Connexion");
+        btnConnexion.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnConnexionActionPerformed(evt);
+            }
+        });
+
+        btnDeconnexion.setText("Deconnexion");
+        btnDeconnexion.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnDeconnexionActionPerformed(evt);
+            }
+        });
+
+        lbInfoRow.setText("Ligne courante:");
+
+        lbCurrentRow.setText("aucune ligne selectionee");
+
+        lbFirst.setText("<<");
+        lbFirst.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                lbFirstMouseClicked(evt);
+            }
+        });
+
+        lbPrevious.setText("<");
+        lbPrevious.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                lbPreviousMouseClicked(evt);
+            }
+        });
+
+        lbNext.setText(">");
+        lbNext.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                lbNextMouseClicked(evt);
+            }
+        });
+
+        lbLast.setText(">>");
+        lbLast.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                lbLastMouseClicked(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(btnAjouter)
-                    .addComponent(btnModifier)
-                    .addComponent(btnDetruire)
-                    .addComponent(cbPrepare))
-                .addContainerGap(258, Short.MAX_VALUE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(btnDetruire)
+                            .addComponent(cbPrepare)
+                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                .addComponent(btnAjouter, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(btnModifier, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                            .addComponent(btnDeconnexion)
+                            .addComponent(btnConnexion)))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
+                                .addGap(85, 85, 85)
+                                .addComponent(lbFirst))
+                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
+                                .addGap(52, 52, 52)
+                                .addComponent(lbInfoRow)))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(lbCurrentRow)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(lbPrevious)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(lbNext, javax.swing.GroupLayout.PREFERRED_SIZE, 19, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(50, 50, 50)
+                                .addComponent(lbLast)))))
+                .addContainerGap(100, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
+                .addComponent(btnConnexion)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(btnDeconnexion)
+                .addGap(18, 18, 18)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(lbInfoRow)
+                    .addComponent(lbCurrentRow))
+                .addGap(27, 27, 27)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(lbFirst)
+                    .addComponent(lbLast)
+                    .addComponent(lbNext)
+                    .addComponent(lbPrevious))
+                .addGap(27, 27, 27)
                 .addComponent(btnAjouter)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(btnModifier)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(btnDetruire)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(cbPrepare)
-                .addContainerGap(156, Short.MAX_VALUE))
+                .addContainerGap())
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    // Database structure: 
+    // idPourse (pk) number(5)
+    // idNomPourse varchar2(60)
+    // idDateNaissancePourse date
+    // idAgePourse number(5)
+    // idPrixPourse number(5,2)
+    
+    // <editor-fold defaultstate="collapsed" desc="Events">
+    private void btnAjouterActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAjouterActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnAjouterActionPerformed
+
+    private void btnModifierActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnModifierActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnModifierActionPerformed
+
+    private void btnDetruireActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDetruireActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnDetruireActionPerformed
+
+    private void cbPrepareActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbPrepareActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_cbPrepareActionPerformed
+
+    private void btnConnexionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnConnexionActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnConnexionActionPerformed
+
+    private void btnDeconnexionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeconnexionActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnDeconnexionActionPerformed
+
+    private void lbFirstMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lbFirstMouseClicked
+        // TODO add your handling code here:
+    }//GEN-LAST:event_lbFirstMouseClicked
+
+    private void lbPreviousMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lbPreviousMouseClicked
+        // TODO add your handling code here:
+    }//GEN-LAST:event_lbPreviousMouseClicked
+
+    private void lbNextMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lbNextMouseClicked
+        // TODO add your handling code here:
+    }//GEN-LAST:event_lbNextMouseClicked
+
+    private void lbLastMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lbLastMouseClicked
+        // TODO add your handling code here:
+    }//GEN-LAST:event_lbLastMouseClicked
+    // </editor-fold>
+    
     /**
      * @param args the command line arguments
      */
@@ -139,8 +298,16 @@ public class BDresult extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAjouter;
+    private javax.swing.JButton btnConnexion;
+    private javax.swing.JButton btnDeconnexion;
     private javax.swing.JButton btnDetruire;
     private javax.swing.JButton btnModifier;
     private javax.swing.JCheckBox cbPrepare;
+    private javax.swing.JLabel lbCurrentRow;
+    private javax.swing.JLabel lbFirst;
+    private javax.swing.JLabel lbInfoRow;
+    private javax.swing.JLabel lbLast;
+    private javax.swing.JLabel lbNext;
+    private javax.swing.JLabel lbPrevious;
     // End of variables declaration//GEN-END:variables
 }
